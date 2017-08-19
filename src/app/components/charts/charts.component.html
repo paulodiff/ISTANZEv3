@@ -1,0 +1,141 @@
+    <h2>Charts</h2>
+
+    <form name="form" (ngSubmit)="f.form.valid && getData()" #f="ngForm" novalidate>
+
+        <div class="row">
+
+        <div class="col-md-4">
+        
+            <div class="form-group">
+            <label for="dadata">DaData</label>
+            <input type="date" class="form-control" 
+                    name="dadata"
+                    [ngModel]="model.daData | date: 'yyyy-MM-dd'" 
+                    (ngModelChange)="model.daData=$event"
+                    #dadata="ngModel" required />
+            <div *ngIf="f.submitted && !dadata.valid" class="help-block">DaData richiesto</div>
+            </div>
+        
+        </div>
+
+        <div class="col-md-4">
+            
+            <div class="form-group">
+            <label for="password">AData</label>
+            <input  type="date" class="form-control" 
+                    name="aData" 
+                    [ngModel]="model.aData | date: 'yyyy-MM-dd'" 
+                    (ngModelChange)="model.aData=$event"
+                    #adata="ngModel"  />
+            </div>
+
+        </div>
+
+        <div class="col-md-4">
+        
+            <div class="form-group">
+            <label for="password">NumTel</label>
+            <input type="text" class="form-control" name="numTel" [(ngModel)]="model.numTel" #numTel="ngModel"  />
+            </div>
+        </div>
+        </div>
+
+
+        <div class="form-group">
+            <button [disabled]="loading" class="btn btn-primary">GetData</button>
+            <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+        </div>
+        <div *ngIf="error" class="alert alert-danger">{{error}}</div>
+    </form>
+
+
+<hr>
+
+<section *ngIf="isLoading && !errorMessage">
+    Loading .................. Retrieving data...
+</section>
+
+<section *ngIf="errorMessage">
+      {{errorMessage}}
+</section>
+
+<!--
+
+<table class="table"><tbody>
+<tr *ngFor="let hero of photosArray" (click)="onSelect(hero)">
+      <td>{{hero.id}}</td>
+      <td>{{hero.title}}</td>
+</tr>
+</tbody></table>
+
+
+<table class="table"><tbody>
+<tr *ngFor="let course of observablePhotos | async">
+    <td>ID: {{course?.id}}</td>
+    <td>TL: {{course?.title}}</td>
+</tr>
+</tbody></table>
+
+-->
+
+<div class="row">
+    <div class="col-md-12">
+      <div style="display: block;">
+      <canvas baseChart width="400" height="200"
+                  [datasets]="lineChartData"
+                  [labels]="lineChartLabels"
+                  [options]="lineChartOptions"
+                  [colors]="lineChartColors"
+                  [legend]="lineChartLegend"
+                  [chartType]="lineChartType"
+                  (chartHover)="chartHovered($event)"
+                  (chartClick)="chartClicked($event)"></canvas>
+      </div>
+    </div>
+</div>
+
+<!--
+
+<div class="row">    
+    <div class="col-md-12" style="margin-bottom: 10px">
+      <table class="table table-responsive table-condensed">
+        <tr>
+          <th *ngFor="let label of lineChartLabels">{{label}}</th>
+        </tr>
+        <tr *ngFor="let d of lineChartData">
+          <td *ngFor="let label of lineChartLabels; let j=index">{{d && d.data[j]}}</td>
+        </tr>
+      </table>
+      <button (click)="randomize()">CLICK</button>
+    </div>
+  </div>
+-->  
+
+<div class="row">
+  <div class="col-md-4">
+    <input *ngIf="config.filtering" placeholder="Ricerca in tabella..."
+           [ngTableFiltering]="config.filtering"
+           class="form-control"
+           (tableChanged)="onChangeTable(config)"/>
+  </div>
+</div>
+
+<br>
+
+<ng-table [config]="config"
+          (tableChanged)="onChangeTable(config)"
+          (cellClicked)="onCellClick($event)"
+          [rows]="rows" [columns]="columns">
+</ng-table>
+<pagination *ngIf="config.paging"
+            class="pagination-sm"
+            [(ngModel)]="page"
+            [totalItems]="length"
+            [itemsPerPage]="itemsPerPage"
+            [maxSize]="maxSize"
+            [boundaryLinks]="true"
+            [rotate]="false"
+            (pageChanged)="onChangeTable(config, $event)"
+            (numPages)="numPages = $event">
+</pagination>
+<pre *ngIf="config.paging" class="card card-block card-header">Page: {{page}} / {{numPages}}</pre>

@@ -27,10 +27,39 @@ export class PhotosService {
             .catch(this.handleErrorObservable);
     }
 
+    getAllUsersObservable(): Observable<any[]> {
+        // add authorization header with jwt token
+        // let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        // let options = new RequestOptions({ headers: headers });
+        console.log('PhotosService.getAllPhotosObservable');
+        let options = new RequestOptions({ headers: this.getHeaders() });
+
+        // get users from api
+        return this.http.get('http://localhost:9988/phone/getData', options)
+            // .map((response: Response) => response.json())
+            .map(this.parseData)
+            .catch(this.handleErrorObservable);
+    }
+
+
+    getPhoneDataObservable( model: any): Observable<any[]> {
+        // add authorization header with jwt token
+        // let headers = new Headers({ 'Authorization': 'Bearer ' + this.authenticationService.token });
+        // let options = new RequestOptions({ headers: headers });
+        console.log('PhotosService.getPhoneDataObservable', model);
+        let options = new RequestOptions({ headers: this.getHeaders(), params : model });
+
+        // get users from api
+        return this.http.get('http://localhost:9988/phone/getData', options)
+            // .map((response: Response) => response.json())
+            .map(this.parseData)
+            .catch(this.handleErrorObservable);
+    }
+
     // This method parses the data to JSON
     private parseData(res: Response)  {
-        console.log('--parseData ---');
-        console.log(res.json());
+        // console.log('--parseData ---');
+        // console.log(res.json());
         return res.json() || [];
     }
 

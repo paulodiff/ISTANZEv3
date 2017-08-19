@@ -10,8 +10,8 @@ import { PhotosService } from './services/photos.service';
 import { UserService } from './services/user.service';
 
 import { LoginComponent } from './components/login/login.component';
-
 import { DataTableComponent } from './components/datatable/datatable.component';
+import { ChartsComponent } from './components/charts/charts.component';
 
 import { GlobalErrorHandler } from './services/globalerrorhandler.service';
 
@@ -30,12 +30,18 @@ import { httpFactory } from './services/httpfactory.service';
 
 import { HttpModule, Http, XHRBackend, RequestOptions} from '@angular/http';
 
+import { ChartsModule } from 'ng2-charts/ng2-charts';
+
+import { DatepickerModule } from 'ngx-bootstrap/datepicker';
+
+import { DatePipe } from '@angular/common';
 @NgModule({
 
   declarations: [
     AppComponent,
     LoginComponent,
-    DataTableComponent
+    DataTableComponent,
+    ChartsComponent
   ],
 
   imports: [
@@ -46,7 +52,9 @@ import { HttpModule, Http, XHRBackend, RequestOptions} from '@angular/http';
     NgbModule.forRoot(),
     Ng2TableModule,
     PaginationModule.forRoot(),
-    TabsModule
+    TabsModule,
+    ChartsModule,
+    DatepickerModule.forRoot()
   ],
 
   providers: [
@@ -58,7 +66,8 @@ import { HttpModule, Http, XHRBackend, RequestOptions} from '@angular/http';
       provide: Http,
       useFactory: httpFactory,
       deps: [XHRBackend, RequestOptions]
-    }
+    },
+    DatePipe
   ],
 
   bootstrap: [AppComponent]
