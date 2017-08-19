@@ -1,28 +1,73 @@
-# ISTANZEv3
+ISTANZE v2 - Passaggio dell'ambiente ad Angular 2/4
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.3.1.
+Prime idee:
 
-## Development server
+# Angular 2/4
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+- https://angular.io/tutorial/toh-pt1
+- ng serve (avvia il progetto live-reload)
 
-## Code scaffolding
+- Struttura cartelle interessante
+- http://jasonwatmore.com/post/2016/08/16/angular-2-jwt-authentication-example-tutorial
+ 
+app
+    _guards
+    _helpers
+    _services
+    _models
+    route1
+    route2
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+# Routing
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+# Librerie
 
-## Running unit tests
+ng-bootstrap bootstrap 4
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+npm install bootstrap@4.0.0-beta --save
 
-## Running end-to-end tests
+npm install --save @ng-bootstrap/ng-bootstrap
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
-Before running the tests make sure you are serving the app via `ng serve`.
+npm install --save ngx-bootstrap
 
-## Further help
+http://valor-software.com/ngx-bootstrap/index-bs4.html#/
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+Fake json
+https://jsonplaceholder.typicode.com/
+
+# Services / Singleton
+
+get save delete Observable
+https://www.barbarianmeetscoding.com/blog/2016/04/02/getting-started-with-angular-2-step-by-step-6-consuming-real-data-with-http/
+
+Per accesso ai dati
+
+# Sicurezza
+
+Autorizzazioni e Login e Profilo
+http://jasonwatmore.com/post/2016/08/16/angular-2-jwt-authentication-example-tutorial
+
+
+# Interceptor
+
+https://scotch.io/@kashyapmukkamala/using-http-interceptor-with-angular2
+
+
+# Grid
+
+Grid - https://swimlane.gitbooks.io/ngx-datatable/content/introduction/features.html
+ng2-grid
+
+ng2-table
+npm i ng2-table --save
+
+
+# Template
+
+# Test e2e
+
+Ecc.
+
+
