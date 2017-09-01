@@ -1,14 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { DatePipe } from '@angular/common';
 
 import { AuthenticationService } from '../../services/authentication.service';
 import { PhotosService } from '../../services/photos.service';
 import { Photo } from '../../models/photo';
+import { ModalContentComponent } from './modalcontent.component';
 
-import { Observable } from 'rxjs';
+import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
+
+/*
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { DatePipe } from '@angular/common';
+import { BsModalService } from 'ngx-bootstrap/modal';
+import { BsModalRef } from 'ngx-bootstrap/modal/modal-options.class';
+*/
 
 
 @Component({
@@ -20,52 +27,38 @@ export class ChartsComponent implements OnInit {
     model: any = {};
     photosArray: Photo[] = [];
     usersArray: Array<any> = [];
+
     loading = false;
     isLoading: Boolean = true;
     errorMessage: String = '';
     observablePhotos: Observable<Photo[]>;
     error = '';
-    public rows: Array<any> = [];
-    public columns: Array<any> = [
-    {title: 'Name1', name: 'id'},
-    {title: 'Name2', name: 'albumId'},
-    {
-      title: 'Position',
-      name: 'title',
-      sort: false
-    },
-    // {title: 'Office', className: ['office-header', 'text-success'], name: 'title', sort: 'asc'},
-    // {title: 'Extn.', name: 'ext', sort: '', filtering: {filterString: '', placeholder: 'Filter by extn.'}},
-    // {title: 'Start date', className: 'text-warning', name: 'startDate'},
-    {title: 'Url', name: 'url',filtering: {filterString: '', placeholder: 'Filter by 44.'}}
-  ];
-  public page: number = 1;
-  public itemsPerPage: number = 10;
-  public maxSize: number = 5;
-  public numPages: number = 1;
-  public length: number = 0;
+    public phoneData = <any>{};
+    // public lineChartData: Array<any> = [ {data: [], label: ''}];
+    // public lineChartLabels: Array<any> = [];
 
-public config:any = {
-    paging: true,
-    sorting: {columns: this.columns},
-    filtering: {filterString: ''},
-    className: ['table-striped', 'table-bordered']
+    // dataChart: any = [];
+    closeResult: string;
+    multi: any[];
+
+    view: any[]; // = [700, '100%'];
+
+    // options
+    showXAxis = true;
+    showYAxis = true;
+    gradient = false;
+    showLegend = true;
+    showXAxisLabel = true;
+    xAxisLabel = 'Periodo';
+    showYAxisLabel = true;
+    yAxisLabel = 'N. telefonate';
+
+  colorScheme = {
+    domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
   };
 
-   data:Array<any> = [];
-
-  public phoneData = <any>{};
-  // public lineChartData: Array<any> = [];
-  // public lineChartLabels: Array<any> = [];
-  public lineChartData: Array<any> = [
-    {data: [65, 59, 80, 81, 56, 55, 40], label: '4614'}
-  ];
-  public lineChartLabels: Array<any> = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
-  public lineChartOptions: any = { responsive: true };
-  public lineChartLegend: boolean = true;
-  public lineChartType: string = 'bar';
-
+  dataChart = [];
+  buildedDataChart = [];
 
     /*
     rows = [
@@ -84,20 +77,25 @@ public config:any = {
         private router: Router,
         private authenticationService: AuthenticationService,
         private photosService: PhotosService,
-        private datePipe: DatePipe
+        private datePipe: DatePipe,
+        private modalService: NgbModal
         ) { }
 
     ngOnInit() {
 
         console.log('ChartsComponent:ngOnInit');
 
-        this.loading = true;
+        // this.loading = true;
         const now = new Date();
         this.model.daData = now.setDate(now.getDate() - 7);
         this.model.aData = new Date();
-        this.model.numTel = '4607';
+        this.model.numTel = '4607,4601,4623,4614';
+        this.model.left = false;
+        this.model.middle = false;
+        this.model.right = true;
+        this.model.datePicker = '';
 
-
+        /*
         this.photosService.getAllUsersObservable().subscribe(
             res => {
                 this.phoneData = res;
@@ -110,6 +108,7 @@ public config:any = {
             e => this.errorMessage = e,
             () =>  { this.isLoading = false;  this.loading = false; }
             );
+        */
         // console.log(this.data);
 
 
@@ -146,7 +145,8 @@ public config:any = {
     getData() {
       console.log('ChartsComponent:getData');
       console.log(this.model);
-      this.datePipe.transform(this.model.daData, 'yyyy-MM-dd');
+      this.model.daData = this.datePipe.transform(this.model.daData, 'yyyy-MM-dd');
+      this.model.aData = this.datePipe.transform(this.model.aData, 'yyyy-MM-dd');
       this.loading = true;
       this.photosService.getPhoneDataObservable(this.model)
       .subscribe(
@@ -176,114 +176,133 @@ public config:any = {
 
     buildChart() {
       console.log('ChartsComponent:buildChart');
-      this.lineChartLabels = [];
-      this.lineChartData[0].data = [];
-      this.lineChartData[0].label = this.model.numTel;
 
-      for (let item of this.phoneData.dataset ){
-          // console.log(item);
-          // console.log(this.lineChartData);
-          this.lineChartData[0].data.push(item.numTelefonate);
-          this.lineChartLabels.push(item.tel_data.substring(0, 10));
+      // this.lineChartLabels = [];
+      // this.lineChartData = [];
+      
+      /*
+      // per tutti i dati
+      for ( let i = 0; i < this.phoneData[0].lenght; i++) {
+        this.lineChartLabels.push(this.phoneData[i].id);
+        // per tutte le entry verifico se esiste lo aggiorno
       }
-    }
+      */
 
-    public chartClicked(e: any): void {  console.log(e);  }
-    public chartHovered(e: any): void {  console.log(e);  }
+      // build labels
 
-public changePage(page:any, data:Array<any> = this.data):Array<any> {
-    let start = (page.page - 1) * page.itemsPerPage;
-    let end = page.itemsPerPage > -1 ? (start + page.itemsPerPage) : data.length;
-    return data.slice(start, end);
-  }
+      /*
 
-  public changeSort(data:any, config:any):any {
-    if (!config.sorting) {
-      return data;
-    }
+      let _lineChartData:Array<any> = new Array(this.phoneData[0].length);
+      for (let item of this.phoneData[0].data ){
+          console.log(item);
 
-    let columns = this.config.sorting.columns || [];
-    let columnName:string = void 0;
-    let sort:string = void 0;
+          // check nelle labels
+          if ( this.lineChartLabels.indexOf(item.data_ora) === -1 ) {
+            _lineChartData.push(item.data_ora);
+          }
 
-    for (let i = 0; i < columns.length; i++) {
-      if (columns[i].sort !== '' && columns[i].sort !== false) {
-        columnName = columns[i].name;
-        sort = columns[i].sort;
       }
-    }
+      console.log(_lineChartData);
+      this.lineChartLabels = _lineChartData;
+      var numOfLabels = this.lineChartLabels.length;
 
-    if (!columnName) {
-      return data;
-    }
-
-    // simple sorting
-    return data.sort((previous:any, current:any) => {
-      if (previous[columnName] > current[columnName]) {
-        return sort === 'desc' ? -1 : 1;
-      } else if (previous[columnName] < current[columnName]) {
-        return sort === 'asc' ? -1 : 1;
+      // per ogni dati cerco l'indice della labels e per ogni serie inserisco l'i-esimo elemento
+      // init chart data
+      for (let item of this.phoneData[0].data ){
+          // check nelle labels
+          let bFound = false;
+          for (let item2 of this.lineChartData ){
+            if ( item2.label === item.tel_chiamato) {
+              bFound = true;
+            }
+          }
+          if (!bFound) {
+            let voidArray = [];
+            for ( let j = 0; j < numOfLabels; j++) { voidArray.push(Math.floor((Math.random() * 100) + 1)); };
+            this.lineChartData.push({ label : item.tel_chiamato, data: voidArray});
+          }
       }
-      return 0;
-    });
-  }
+      */
 
-  public changeFilter(data:any, config:any):any {
-    let filteredData:Array<any> = data;
-    this.columns.forEach((column:any) => {
-      if (column.filtering) {
-        filteredData = filteredData.filter((item:any) => {
-          return item[column.name].match(column.filtering.filterString);
-        });
+
+      this.dataChart = [];
+      let currDate = '';
+      let currIndex = 0;
+      let mySeries = this.phoneData[0].series;
+
+      for ( let j = 0; j < mySeries.length; j++) {
+        this.dataChart.push({
+          'name': mySeries[j],
+          'series' : []
+          }
+        );
       }
-    });
 
-    if (!config.filtering) {
-      return filteredData;
-    }
+      console.log(this.dataChart);
 
-    if (config.filtering.columnName) {
-      return filteredData.filter((item:any) =>
-        item[config.filtering.columnName].match(this.config.filtering.filterString));
-    }
+      // riempimento dei dati
+      for (let item of this.phoneData[0].data ){
 
-    let tempArray:Array<any> = [];
-    filteredData.forEach((item:any) => {
-      let flag = false;
-      this.columns.forEach((column:any) => {
-        if (item[column.name].toString().match(this.config.filtering.filterString)) {
-          flag = true;
+        // per ogni serie
+        for ( let j = 0; j < mySeries.length; j++) {
+
+          let bFound = false; let indexFound = 0;
+          // se il dato appartiene alla serie
+          if ( this.dataChart[j].name === item.tel_chiamato ) {
+            // da aggiornare o inserire
+            for ( let k = 0; k < this.dataChart[j].series.length; k++) {
+              if (this.dataChart[j].series[k].name === item.data_ora) { 
+                bFound = true;
+                indexFound = k;
+                console.log('found:', j, k, indexFound);
+              }
+            }
+
+            if (!bFound) {
+              this.dataChart[j].series.push({
+                'name': item.data_ora,
+                'value': item.numTelefonate
+              });
+            } else {
+              this.dataChart[j].series[indexFound].value = item.numTelefonate;
+            }
+          } else  {
+            // il dato non appartiene alla serie quindi
+            // da inserire 0 solo se non esiste
+
+            let bFound = false; let indexFound = 0;
+            for ( let k = 0; k < this.dataChart[j].series.length; k++) {
+              if (this.dataChart[j].series[k].name === item.data_ora) { 
+                bFound = true;
+                indexFound = k;
+                console.log('found:', j, k, indexFound);
+              }
+            }
+
+            if (!bFound) {
+              this.dataChart[j].series.push({
+                'name': item.data_ora,
+                'value': 0
+              });
+            }
+          }
         }
-      });
-      if (flag) {
-        tempArray.push(item);
       }
-    });
-    filteredData = tempArray;
 
-    return filteredData;
-  }
 
-  public onChangeTable(config:any, page:any = {page: this.page, itemsPerPage: this.itemsPerPage}):any {
-    if (config.filtering) {
-      Object.assign(this.config.filtering, config.filtering);
+      console.log(this.dataChart);
+      this.dataChart = [...this.dataChart];
+
+
     }
 
-    if (config.sorting) {
-      Object.assign(this.config.sorting, config.sorting);
-    }
+  public chartClicked(e: any): void {  console.log(e);  }
+  public chartHovered(e: any): void {  console.log(e);  }
 
-    let filteredData = this.changeFilter(this.data, this.config);
-    let sortedData = this.changeSort(filteredData, this.config);
-    this.rows = page && config.paging ? this.changePage(page, sortedData) : sortedData;
-    this.length = sortedData.length;
-  }
+  public showAlert(): void { console.log('ShowAlert');  }
 
+  
   public onCellClick(data: any): any {
     console.log(data);
   }
-
-
-
-
 }

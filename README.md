@@ -22,7 +22,14 @@ Prime idee:
 
 ## Librerie
 
+- Angular Material 
+    - https://material.angular.io/guide/getting-started
+    - npm install --save @angular/material @angular/cdk
+    - npm install --save @angular/animations
+
 - ng-bootstrap bootstrap 4
+
+- npm install --save bootstrap@4.0.0-alpha.6 font-awesome
 
 - npm install bootstrap@4.0.0-beta --save
 
@@ -31,6 +38,8 @@ Prime idee:
 - npm install --save ngx-bootstrap
 
 http://valor-software.com/ngx-bootstrap/index-bs4.html#/
+
+- https://github.com/start-angular/SB-Admin-BS4-Angular-4
 
 
 - Fake json per accesso a backend https://jsonplaceholder.typicode.com/
@@ -60,6 +69,9 @@ ng2-grid
 
 ng2-table
 npm i ng2-table --save
+
+AngularJs DataTable
+http://danielnagy.me/md-data-table/
 
 # Chart
 
