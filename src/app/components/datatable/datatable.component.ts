@@ -9,6 +9,10 @@ import { Observable } from 'rxjs';
 
 import { TableData } from './table-data';
 
+import * as pdfMake from 'pdfmake/build/pdfmake.js';
+import * as pdfFonts from 'pdfmake/build/vfs_fonts.js';
+pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
 @Component({
     moduleId: module.id,
     templateUrl: 'datatable.component.html'
@@ -123,7 +127,16 @@ public config:any = {
 
 
 
+    pdfMake() {
+        const dd = {
+            content: [
+                'First paragraph',
+                'Another paragraph, this time a little bit longer to make sure, this line will be divided into at least two lines'
+            ]
+        };
+        pdfMake.createPdf(dd).open();
 
+    }
 
 
 

@@ -95,6 +95,7 @@ export class PhotosService {
     private handleErrorObservable (error: any) {
         // log error
         // could be something more sofisticated
+        console.log('PhotosService:handleErrorObservable');
         console.error(error);
         let errorMsg = error.message || `handleErrorObservable ...`;
         console.error(errorMsg);

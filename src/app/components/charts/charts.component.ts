@@ -6,7 +6,6 @@ import { DatePipe } from '@angular/common';
 import { AuthenticationService } from '../../services/authentication.service';
 import { PhotosService } from '../../services/photos.service';
 import { Photo } from '../../models/photo';
-import { ModalContentComponent } from './modalcontent.component';
 
 import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
@@ -29,7 +28,6 @@ export class ChartsComponent implements OnInit {
     usersArray: Array<any> = [];
 
     loading = false;
-    isLoading: Boolean = true;
     errorMessage: String = '';
     observablePhotos: Observable<Photo[]>;
     error = '';
@@ -129,25 +127,14 @@ export class ChartsComponent implements OnInit {
         // this.heroService.getHeroes().then(heroes => this.heroes = heroes);
     }
 
-    login_source() {
-        this.loading = true;
-        this.authenticationService.login(this.model.username, this.model.password)
-            .subscribe(result => {
-                if (result === true) {
-                    this.router.navigate(['/']);
-                } else {
-                    this.error = 'Username or password is incorrect';
-                    this.loading = false;
-                }
-            });
-    }
 
     getData() {
       console.log('ChartsComponent:getData');
       console.log(this.model);
+      this.loading = true;
+      console.log('ChartsComponent:getData:loading:', this.loading);
       this.model.daData = this.datePipe.transform(this.model.daData, 'yyyy-MM-dd');
       this.model.aData = this.datePipe.transform(this.model.aData, 'yyyy-MM-dd');
-      this.loading = true;
       this.photosService.getPhoneDataObservable(this.model)
       .subscribe(
         res => {
@@ -156,23 +143,13 @@ export class ChartsComponent implements OnInit {
           // this.onChangeTable(this.config);
           this.buildChart();
           this.loading = false;
+          console.log('ChartsComponent:getData:loading:', this.loading);
         },
         e => this.errorMessage = e,
-        () =>  { this.isLoading = false;  this.loading = false; }
+        () =>  { this.loading = false; }
         );
-        this.loading = false;
     }
 
-    login() {
-        this.loading = true;
-
-        this.photosService.getAllUsersObservable().subscribe(
-            res => this.photosArray = res,
-            e => this.errorMessage = e,
-            () => this.loading = false
-            );
-        console.log(this.photosArray);
-    }
 
     buildChart() {
       console.log('ChartsComponent:buildChart');

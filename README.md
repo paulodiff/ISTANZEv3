@@ -14,7 +14,7 @@ Prime idee:
 - - components
 - - models 
 - - services
-- - 
+- - 123
 
 ## Routing
 
@@ -36,11 +36,13 @@ Prime idee:
 - npm install --save @ng-bootstrap/ng-bootstrap
 
 - npm install --save ngx-bootstrap
+- - 1
+- - 2
 
-http://valor-software.com/ngx-bootstrap/index-bs4.html#/
+- http://valor-software.com/ngx-bootstrap/index-bs4.html#/
 
+- Template
 - https://github.com/start-angular/SB-Admin-BS4-Angular-4
-
 
 - Fake json per accesso a backend https://jsonplaceholder.typicode.com/
 
@@ -56,11 +58,9 @@ Per accesso ai dati
 Autorizzazioni e Login e Profilo
 http://jasonwatmore.com/post/2016/08/16/angular-2-jwt-authentication-example-tutorial
 
-
 # Interceptor
 
 https://scotch.io/@kashyapmukkamala/using-http-interceptor-with-angular2
-
 
 # Grid
 
@@ -73,14 +73,20 @@ npm i ng2-table --save
 AngularJs DataTable
 http://danielnagy.me/md-data-table/
 
+- Da provare
+- https://akveo.github.io/ng2-smart-table/#/demo
+
 # Chart
 
 npm install ng2-charts --save
 
 # Template
 
+# Pdf 
+
+- pdfMake
+- https://stackoverflow.com/questions/45136111/angular2-how-to-use-pdfmake-library
+
 # Test e2e
 
 Ecc.
-
-

@@ -11,13 +11,19 @@ import { AuthenticationService } from './services/authentication.service';
 import { PhotosService } from './services/photos.service';
 import { UserService } from './services/user.service';
 import { httpFactory } from './services/httpfactory.service';
+import { ConsoleLogService } from './services/log.service';
+import { Logger } from './services/default-log.service';
+import { DialogService } from './services/dialog.service';
+
 
 import { LoginComponent } from './components/login/login.component';
 import { DataTableComponent } from './components/datatable/datatable.component';
 import { ChartsComponent } from './components/charts/charts.component';
-import { ModalContentComponent } from './components/charts/modalcontent.component';
 import { GlobalErrorHandler } from './services/globalerrorhandler.service';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { HeaderComponent } from './components/headerbar/header.component';
+import { ModalComponent } from './components/modal/modal.component';
+
 
 import { routing } from './app.routing';
 
@@ -30,6 +36,9 @@ import { ChartsModule } from 'ng2-charts';
 
 import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+
+
+import { Ng2SmartTableModule } from 'ng2-smart-table';
 
 /*
 import { Ng2TableModule } from 'ng2-table/ng2-table';
@@ -48,8 +57,9 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     LoginComponent,
     DataTableComponent,
     ChartsComponent,
-    ModalContentComponent,
-    SidebarComponent
+    SidebarComponent,
+    HeaderComponent,
+    ModalComponent
   ],
 
   imports: [
@@ -61,11 +71,12 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     NgbModule.forRoot(),
     ChartsModule,
     NgxDatatableModule,
-    NgxChartsModule
+    NgxChartsModule,
+    Ng2SmartTableModule
   ],
 
   entryComponents: [
-    ModalContentComponent
+    ModalComponent
   ],
 
   providers: [
@@ -78,9 +89,17 @@ import { ModalModule } from 'ngx-bootstrap/modal';
       useFactory: httpFactory,
       deps: [XHRBackend, RequestOptions]
     },
-    DatePipe
+    DatePipe,
+    {
+      provide: Logger,
+      useClass: ConsoleLogService
+    },
+    DialogService
+
   ],
 
-  bootstrap: [AppComponent]
+  bootstrap: [
+    AppComponent
+  ]
 })
 export class AppModule { }
