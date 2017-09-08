@@ -4,10 +4,9 @@ import { Observable } from 'rxjs';
 import { DatePipe } from '@angular/common';
 
 import { AuthenticationService } from '../../services/authentication.service';
-import { PhotosService } from '../../services/photos.service';
+import { PostaService } from '../../services/posta.service';
 import { Photo } from '../../models/photo';
 
-import { NgbModal, ModalDismissReasons} from '@ng-bootstrap/ng-bootstrap';
 
 
 /*
@@ -74,9 +73,8 @@ export class ChartsComponent implements OnInit {
     constructor(
         private router: Router,
         private authenticationService: AuthenticationService,
-        private photosService: PhotosService,
-        private datePipe: DatePipe,
-        private modalService: NgbModal
+        private postaService: PostaService,
+        private datePipe: DatePipe
         ) { }
 
     ngOnInit() {
@@ -130,20 +128,20 @@ export class ChartsComponent implements OnInit {
 
     getData() {
       console.log('ChartsComponent:getData');
-      console.log(this.model);
       this.loading = true;
-      console.log('ChartsComponent:getData:loading:', this.loading);
       this.model.daData = this.datePipe.transform(this.model.daData, 'yyyy-MM-dd');
       this.model.aData = this.datePipe.transform(this.model.aData, 'yyyy-MM-dd');
-      this.photosService.getPhoneDataObservable(this.model)
+      this.model.daDataPosta = this.model.daData;
+      this.model.aDataPosta = this.model.aData;
+      console.log(this.model);
+      this.postaService.getStats(this.model)
       .subscribe(
         res => {
           this.phoneData = res;
           console.log(this.phoneData);
           // this.onChangeTable(this.config);
-          this.buildChart();
+          // this.buildChart();
           this.loading = false;
-          console.log('ChartsComponent:getData:loading:', this.loading);
         },
         e => this.errorMessage = e,
         () =>  { this.loading = false; }
@@ -278,7 +276,6 @@ export class ChartsComponent implements OnInit {
 
   public showAlert(): void { console.log('ShowAlert');  }
 
-  
   public onCellClick(data: any): any {
     console.log(data);
   }

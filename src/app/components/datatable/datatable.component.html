@@ -13,9 +13,6 @@
         <div *ngIf="error" class="alert alert-danger">{{error}}</div>
     </form>
 
-<section *ngIf="isLoading && !errorMessage">
-    Loading .................. Retrieving data...
-</section>
 
 <section *ngIf="errorMessage">
       {{errorMessage}}
@@ -37,7 +34,7 @@
           [limit]="10"
           
           >
-            <ngx-datatable-column name="albumId" width="50">
+            <ngx-datatable-column name="id" width="50">
                 <ng-template let-value="value" ngx-datatable-cell-template>
                   <strong>{{value}}</strong>
                 </ng-template>
@@ -50,7 +47,7 @@
                 </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column name="title" width="300">
+            <ngx-datatable-column name="cdc" width="300">
                     <ng-template let-value="value" ngx-datatable-cell-template>
                       <strong>{{value}}</strong>
                     </ng-template>

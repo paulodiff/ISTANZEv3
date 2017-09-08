@@ -12,10 +12,9 @@ import { Photo } from '../../models/photo';
 // Import the application components and services.
 import { Logger } from '../../services/default-log.service';
 
-import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+// import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+// import { ModalComponent } from '../../components/modal/modal.component';
 
-
-import { ModalComponent } from '../../components/modal/modal.component';
 import { DialogService } from '../../services/dialog.service';
 
 
@@ -33,6 +32,11 @@ export class LoginComponent implements OnInit {
     error = '';
     source: any = [];
     result: any;
+    loggedIn: boolean = false;
+    credentials: any = {
+        username: '',
+        password: ''
+     };
 
     displayedColumns = ['userId', 'userName', 'progress', 'color'];
     settings = {
@@ -55,27 +59,19 @@ export class LoginComponent implements OnInit {
         private authenticationService: AuthenticationService,
         private photosService: PhotosService,
         private logger: Logger,
-        private modalService: NgbModal,
         private dialogService: DialogService
         ) { }
 
     ngOnInit() {
         // reset login status
-        this.logger.info('Start...logger');
-        this.logger.group( 'Group Test' );
-        this.logger.log( 'Inside a group.' );
-        this.logger.error( 'Inside a group.' );
-        this.logger.info( 'Inside a group.' );
-        this.logger.warn( 'Inside a group.' );
-        this.logger.groupEnd();
-
-        console.log('LoginComponent:ngOnInit');
-        this.isLoading = true;
-        this.authenticationService.logout();
+        this.logger.info('LoginComponent:ngOnInit');
+        this.loggedIn = this.authenticationService.isAuthenticated();
+        // this.isLoading = true;
+        // this.authenticationService.logout();
         // this.photosService.getAllPhotos().then(res => this.photosArray = res);
 
-        this.observablePhotos = this.photosService.getAllPhotosObservable();
-        this.isLoading = false;
+        // this.observablePhotos = this.photosService.getAllPhotosObservable();
+        // this.isLoading = false;
 
 
         // this.dataSource = new ExampleDataSource(this.exampleDatabase);
@@ -94,35 +90,56 @@ export class LoginComponent implements OnInit {
         */
 
 
-
+        /*
         this.photosService.getAllPhotosObservable().subscribe(
             res => this.source = res,
             e => this.errorMessage = e,
             () => this.isLoading = false
             );
         console.log(this.source);
+        */
 
         // this.heroService.getHeroes().then(heroes => this.heroes = heroes);
     }
 
 
 
-    login_source() {
-        console.log('LoginComponent:login_source');
+    login() {
+        this.logger.info('LoginComponent:login');
         this.isLoading = true;
-        this.authenticationService.login(this.model.username, this.model.password)
+        this.credentials.username = this.model.username;
+        this.credentials.password = this.model.password;
+
+        this.authenticationService.login(this.credentials)
             .subscribe(result => {
+                this.logger.info(result);
                 if (result === true) {
-                    this.router.navigate(['/']);
+                    this.logger.info('LoginComponent:login:OK!');
+                    this.loggedIn = true;
+                    // this.router.navigate(['/']);
                 } else {
-                    this.error = 'Username or password is incorrect';
-                    this.isLoading = false;
+                    this.logger.info('Result false');
+                    this.dialogService
+                    .confirm('Confirm Dialog', 'Username or password is incorrect!')
+                    .then(res => { this.result = res; console.log('Dialog return:', res); });
                 }
-            });
+                this.isLoading = false;
+            },
+            (err) => {
+                    this.error = err; 
+                    this.logger.info('LoginComponent:login:ERROR:', err);
+           }
+        );
     }
 
-    login() {
-        console.log('LoginComponent:login');
+    logout() {
+        this.logger.info('LoginComponent:logut');
+        this.authenticationService.logout();
+        this.loggedIn = false;
+    }
+
+    login2() {
+        console.log('LoginComponent:login2');
         this.isLoading = true;
 
         this.photosService.getAllPhotosObservable().subscribe(
@@ -133,14 +150,6 @@ export class LoginComponent implements OnInit {
         console.log(this.photosArray);
     }
 
-    openModal() {
-        console.log('...open modal...');
-        const modalRef = this.modalService.open(ModalComponent);
-        modalRef.componentInstance.name = 'World';
-        modalRef.componentInstance.title = 'Title - World';
-        console.log(modalRef.result);
-    }
-
     openDialog() {
         console.log('...open dialog...');
         this.dialogService
@@ -149,4 +158,5 @@ export class LoginComponent implements OnInit {
           .catch( function(err) { console.log(err); });
     }
 }
+
 

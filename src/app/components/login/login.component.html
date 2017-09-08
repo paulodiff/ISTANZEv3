@@ -23,4 +23,8 @@
 
 <button (click)="openDialog()" class="btn btn-primary">Open Dialog</button>
 
+
+<button *ngIf="loggedIn" (click)="logout()" class="btn btn-danger btn-block">Disconnetti</button>
+
+
 <ng2-smart-table [settings]="settings" [source]="source"></ng2-smart-table>

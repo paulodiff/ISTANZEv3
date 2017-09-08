@@ -1,0 +1,52 @@
+<div class="col-md-12">
+    <h2>Profile</h2>
+</div>
+
+  <table class="table table-bordered">
+    <tbody>
+     
+      <tr>
+            <td><b>Nome</b></td>
+            <td>{{user.nome}}  {{user.cognome}}  {{user.displayName}}</td>
+      </tr>
+      <tr>
+            <td><b>Codice Fiscale</b></td>
+            <td>{{user.CodiceFiscale}}</td>
+      </tr>
+      <tr>
+            <td><b>userid</b></td>
+            <td>{{user.userid}}</td>
+      </tr>
+      <tr>
+            <td><b>Data Nascita</b></td>
+            <td>{{user.dataNascita}}</td>
+      </tr>    
+      <tr>
+            <td><b>Email</b></td>
+            <td>{{user.userEmail}}</td>
+      </tr>
+      <tr>
+            <td><b>Admin</b></td>
+            <td>{{user.isAdmin}}</td>
+      </tr> 
+      <tr>
+            <td><b>Issuer</b></td>
+            <td>{{user.issuer}}</td>
+      </tr> 
+      <tr>
+            <td><b>Altre informazioni</b></td>
+            <td> Ws:{{user.userWorkstation}} - DomName:{{user.userDomainName}}- Dom:{{user.userDomainName}}</td>
+      </tr>    
+      <tr>
+            <td><b>Versione app</b></td>
+            <td>{{user.appVersion}}</td>
+      </tr>   
+      <tr>
+            <td><b>DbInfo</b></td>
+            <td>{{user.dbInfo}}</td>
+      </tr>       
+    </tbody>
+  </table>
+  
+  <button (click)="getProfileData()" class="btn btn-primary">getProfileData</button>
+  

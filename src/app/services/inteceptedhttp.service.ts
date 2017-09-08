@@ -1,11 +1,14 @@
-import {Injectable} from '@angular/core';
-import {ConnectionBackend, RequestOptions, Request, RequestOptionsArgs, Response, Http, Headers} from '@angular/http';
-import {Observable} from 'rxjs/Rx';
-import {environment} from '../../environments/environment';
+import { Injectable } from '@angular/core';
+import { ConnectionBackend, RequestOptions, Request, RequestOptionsArgs, Response, Http, Headers } from '@angular/http';
+import { Observable } from 'rxjs/Rx';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class InterceptedHttp extends Http {
-    constructor(backend: ConnectionBackend, defaultOptions: RequestOptions) {
+    constructor(
+            backend: ConnectionBackend,
+            defaultOptions: RequestOptions
+        ) {
         super(backend, defaultOptions);
     }
 
@@ -38,15 +41,31 @@ export class InterceptedHttp extends Http {
         return  environment.origin + req;
     }
 
-    private getRequestOptionArgs(options?: RequestOptionsArgs) : RequestOptionsArgs {
+    private getRequestOptionArgs(options?: RequestOptionsArgs): RequestOptionsArgs {
+        console.log('InterceptedHttp:getRequestOptionArgs');
         if (options == null) {
             options = new RequestOptions();
         }
         if (options.headers == null) {
             options.headers = new Headers();
         }
+
         options.headers.append('Content-Type', 'application/json');
+        options.headers.append('Authorization', 'Bearer ' +  this.getToken());
 
         return options;
+    }
+
+    private getToken(): string {
+        console.log('InterceptedHttp:getToken');
+        if( localStorage.getItem(environment.profileStorageId)) {
+            let pData = JSON.parse(localStorage.getItem(environment.profileStorageId));
+            console.log('InterceptedHttp:pData:', pData);
+            console.log('InterceptedHttp:getToken:', pData.token);
+            return pData.token;
+        } else {
+            console.log('InterceptedHttp:getToken:NO TOKEN');
+            return 'No token from local storage!';
+        }
     }
 }

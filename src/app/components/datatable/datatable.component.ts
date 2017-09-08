@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { AuthenticationService } from '../../services/authentication.service';
-import { PhotosService } from '../../services/photos.service';
+import { PostaService } from '../../services/posta.service';
 import { Photo } from '../../models/photo';
 
 import { Observable } from 'rxjs';
@@ -22,7 +22,6 @@ export class DataTableComponent implements OnInit {
     model: any = {};
     photosArray: Photo[] = [];
     loading = false;
-    isLoading: Boolean = true;
     errorMessage: String = '';
     observablePhotos: Observable<Photo[]>;
     error = '';
@@ -64,7 +63,7 @@ public config:any = {
     constructor(
         private router: Router,
         private authenticationService: AuthenticationService,
-        private photosService: PhotosService,
+        private postaService: PostaService,
         ) { }
 
     ngOnInit() {
@@ -73,13 +72,13 @@ public config:any = {
 
         this.loading = true;
 
-        this.photosService.getAllPhotosObservable().subscribe(
+        this.postaService.getCDC().subscribe(
             res => {
                 this.rows = res;
                 console.log(this.rows);
                 },
-            e => this.errorMessage = e,
-            () =>  { this.isLoading = false;  this.loading = false; }
+            e => { this.errorMessage = e; this.loading = false; },
+            () =>  {  this.loading = false; }
             );
         // console.log(this.data);
 
@@ -101,30 +100,6 @@ public config:any = {
         // this.heroService.getHeroes().then(heroes => this.heroes = heroes);
     }
 
-    login_source() {
-        this.loading = true;
-        this.authenticationService.login(this.model.username, this.model.password)
-            .subscribe(result => {
-                if (result === true) {
-                    this.router.navigate(['/']);
-                } else {
-                    this.error = 'Username or password is incorrect';
-                    this.loading = false;
-                }
-            });
-    }
-
-    login() {
-        this.loading = true;
-
-        this.photosService.getAllPhotosObservable().subscribe(
-            res => this.photosArray = res,
-            e => this.errorMessage = e,
-            () => this.loading = false
-            );
-        console.log(this.photosArray);
-    }
-
 
 
     pdfMake() {
@@ -137,7 +112,6 @@ public config:any = {
         pdfMake.createPdf(dd).open();
 
     }
-
 
 
 

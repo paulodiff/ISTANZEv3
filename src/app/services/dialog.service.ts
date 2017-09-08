@@ -1,7 +1,7 @@
 import { Observable } from 'rxjs/Rx';
 import { ModalComponent } from '../components/modal/modal.component';
 // import { MdDialogRef, MdDialog, MdDialogConfig } from '@angular/material';
-import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Injectable } from '@angular/core';
 
 @Injectable()

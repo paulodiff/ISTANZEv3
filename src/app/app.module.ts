@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AppComponent } from './app.component';
 import { AuthenticationService } from './services/authentication.service';
 import { PhotosService } from './services/photos.service';
+import { PostaService } from './services/posta.service';
 import { UserService } from './services/user.service';
 import { httpFactory } from './services/httpfactory.service';
 import { ConsoleLogService } from './services/log.service';
@@ -19,13 +20,16 @@ import { DialogService } from './services/dialog.service';
 import { LoginComponent } from './components/login/login.component';
 import { DataTableComponent } from './components/datatable/datatable.component';
 import { ChartsComponent } from './components/charts/charts.component';
+import { ProfileComponent } from './components/profile/profile.component';
 import { GlobalErrorHandler } from './services/globalerrorhandler.service';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HeaderComponent } from './components/headerbar/header.component';
 import { ModalComponent } from './components/modal/modal.component';
 
-
+import { AuthGuard } from './guards/auth.guard';
 import { routing } from './app.routing';
+
+// import ( InterceptedHttp ) from './services/interceptedhttp.service';
 
 
 // import {CdkTableModule} from '@angular/cdk/table';
@@ -57,6 +61,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     LoginComponent,
     DataTableComponent,
     ChartsComponent,
+    ProfileComponent,
     SidebarComponent,
     HeaderComponent,
     ModalComponent
@@ -81,12 +86,18 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 
   providers: [
     AuthenticationService,
+    AuthGuard,
     UserService,
     PhotosService,
+    PostaService,
     { provide: ErrorHandler, useClass: GlobalErrorHandler },
     {
       provide: Http,
       useFactory: httpFactory,
+
+   //   (backend: XHRBackend, defaultOptions: RequestOptions, authenticationService: AuthenticationService) => {
+   //     return new InterceptedHttp(backend, defaultOptions, authenticationService) },
+
       deps: [XHRBackend, RequestOptions]
     },
     DatePipe,

@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  origin: ''
+  origin: '',
+  apiLogin: 'login'
 };

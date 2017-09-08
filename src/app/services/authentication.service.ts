@@ -1,51 +1,97 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response, HttpModule } from '@angular/http';
 import { Observable } from 'rxjs';
-import 'rxjs/add/operator/map'
+import { Logger } from './default-log.service';
+import { environment } from '../../environments/environment';
+import 'rxjs/add/operator/map';
+
+// login and profile management
 
 @Injectable()
 export class AuthenticationService {
     public token: string;
-    private credentials = '';
 
-    constructor(private http: Http) {
+    constructor(
+            private http: Http,
+            private logger: Logger
+        ) {
         // set token if saved in local storage
-        const  currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        this.token = currentUser && currentUser.token;
+        const  ProfileData = JSON.parse(localStorage.getItem(environment.profileStorageId));
+        this.token = ProfileData && ProfileData.token;
     }
 
-    login(username: string, password: string): Observable<boolean> {
-        return this.http.post('/api/authenticate', JSON.stringify({ username: username, password: password }))
+    login(credentials: any): Observable<boolean> {
+        return this.http.post(environment.apiLoginLDAP, JSON.stringify(credentials))
             .map((response: Response) => {
+                    console.log('AuthenticationService:map');
+                    console.log(response);
+                    console.log(response.json());
                 // login successful if there's a jwt token in the response
-                let token = response.json() && response.json().token;
-                if (token) {
-                    // set token property
-                    this.token = token;
-
-                    // store username and jwt token in local storage to keep user logged in between page refreshes
-                    localStorage.setItem('currentUser', JSON.stringify({ username: username, token: token }));
-
+                    if ( response.status < 200 || response.status >= 300 ) {
+                        console.log('...map...ERROR.......:' , response.status);
+                        throw new Error('This request has failed ' + response.status);
+                    }
+                                    // store username and jwt token in local storage to keep user logged in between page refreshes
+                    localStorage.setItem(environment.profileStorageId, JSON.stringify(response.json()));
                     // return true to indicate successful login
                     return true;
-                } else {
-                    // return false to indicate failed login
-                    return false;
-                }
-            });
+                });
     }
 
     logout(): void {
         // clear token remove user from local storage to log user out
         this.token = null;
-        localStorage.removeItem('currentUser');
+        localStorage.removeItem(environment.profileStorageId);
     }
 
     getCredentials(): string {
-        return this.credentials;
+        // return this.credentials;
+        return '';
     }
 
     setCredentials(credentials: string) {
-        this.credentials = credentials;
+        // this.credentials = credentials;
+        return '';
     }
+
+    getProfile(): Observable<any> {
+       this.logger.info('AuthenticationService:getProfile:1');
+       return this.http.get(environment.apiProfile)
+                .map((response: Response) => {
+                    console.log('AuthenticationService:getProfile:2', response);
+                    // login successful if there's a jwt token in the response
+                    if ( response.status < 200 || response.status >= 300 ) {
+                        console.log('...map...ERROR.......:' , response.status);
+                        throw new Error('This request has failed ' + response.status);
+                    }
+                    // response = response.json();
+                    return response.json();
+                });
+    }
+
+    isAuthenticated(): boolean {
+        // $log.info('AuthService isAuthenticated .. check JWT', !!$localStorage.JWT);
+        return !!localStorage.getItem(environment.profileStorageId);
+    }
+
+    isAdmin(): boolean {
+        // TODO
+        this.logger.info('AuthenticationService:isAdmin');
+        if ( localStorage.userData ) {
+          return localStorage.userData.isAdmin;
+        }
+    }
+
+
+    authorizedRoles(): boolean {
+        // $log.info('AuthService isAuthorized');
+      /*if (!angular.isArray(authorizedRoles)) {
+        authorizedRoles = [authorizedRoles];
+      }
+      return (this.isAuthenticated() &&
+        authorizedRoles.indexOf(Session.userRole) !== -1);
+        */
+        return true;
+    }
+
 }
