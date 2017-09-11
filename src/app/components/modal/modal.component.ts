@@ -16,7 +16,7 @@ import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-primary" (click)="activeModal.close('dummy1')">dummy1</button>
-      <button type="button" class="btn btn-secondary" (click)="activeModal.close(false)">Cancel</button>
+      <button *ngIf="CancelButton" type="button" class="btn btn-secondary" (click)="activeModal.close(false)">Cancel</button>
       <button type="button" class="btn btn-secondary" (click)="activeModal.close(true)">Ok</button>
     </div>
   `
@@ -24,6 +24,9 @@ import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 export class ModalComponent {
   @Input() title;
   @Input() message;
+  @Input() CancelButton;
 
-  constructor(public activeModal: NgbActiveModal) {}
+  constructor(public activeModal: NgbActiveModal) {
+      this.CancelButton = true;
+  }
 }

@@ -12,8 +12,9 @@ import { PhotosService } from './services/photos.service';
 import { PostaService } from './services/posta.service';
 import { UserService } from './services/user.service';
 import { httpFactory } from './services/httpfactory.service';
-import { ConsoleLogService } from './services/log.service';
-import { Logger } from './services/default-log.service';
+// import { ConsoleLogService } from './services/log.service';
+// import { MyLogger } from './services/default-log.service';
+import { Logger } from './services/logger.service';
 import { DialogService } from './services/dialog.service';
 
 
@@ -35,10 +36,10 @@ import { routing } from './app.routing';
 // import {CdkTableModule} from '@angular/cdk/table';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { ChartsModule } from 'ng2-charts';
+// import { ChartsModule } from 'ng2-charts';
 
 
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
+// import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 
@@ -74,8 +75,6 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     routing,
     BrowserAnimationsModule,
     NgbModule.forRoot(),
-    ChartsModule,
-    NgxDatatableModule,
     NgxChartsModule,
     Ng2SmartTableModule
   ],
@@ -90,7 +89,10 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     UserService,
     PhotosService,
     PostaService,
-    { provide: ErrorHandler, useClass: GlobalErrorHandler },
+    {
+      provide: ErrorHandler,
+      useClass: GlobalErrorHandler
+    },
     {
       provide: Http,
       useFactory: httpFactory,
@@ -103,7 +105,7 @@ import { ModalModule } from 'ngx-bootstrap/modal';
     DatePipe,
     {
       provide: Logger,
-      useClass: ConsoleLogService
+      useClass: Logger
     },
     DialogService
 

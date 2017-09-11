@@ -4,18 +4,17 @@ import { ElementRef, ViewChild} from '@angular/core';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Observable } from 'rxjs/Observable';
 
-
-
 import { AuthenticationService } from '../../services/authentication.service';
 import { PhotosService } from '../../services/photos.service';
 import { Photo } from '../../models/photo';
 // Import the application components and services.
-import { Logger } from '../../services/default-log.service';
+import { Logger } from '../../services/logger.service';
 
 // import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 // import { ModalComponent } from '../../components/modal/modal.component';
 
 import { DialogService } from '../../services/dialog.service';
+
 
 
 @Component({

@@ -27,4 +27,17 @@ export class DialogService {
         return modalRef.result;
 
     }
+
+
+    public error(title: string, message: string): Promise<any> { // Observable<boolean> {
+                const modalRef = this.modalService.open(ModalComponent);
+                modalRef.componentInstance.message = message;
+                modalRef.componentInstance.title = title;
+                modalRef.componentInstance.CancelButton = false;
+                return modalRef.result;
+    }
+
+    public test(): void {
+        return;
+    }
 }

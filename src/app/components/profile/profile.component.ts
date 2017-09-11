@@ -10,7 +10,7 @@ import { AuthenticationService } from '../../services/authentication.service';
 import { PhotosService } from '../../services/photos.service';
 import { Photo } from '../../models/photo';
 // Import the application components and services.
-import { Logger } from '../../services/default-log.service';
+import { Logger } from '../../services/logger.service';
 
 // import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 // import { ModalComponent } from '../../components/modal/modal.component';
@@ -91,7 +91,11 @@ export class ProfileComponent implements OnInit {
             this.user = result;
             this.logger.info(this.user);
             },
-            (err) => { this.error = err; console.log('ProfileComponent:getProfile:ERROR:', err); }
+            (err) => { 
+                this.error = err; 
+                console.log('ProfileComponent:getProfile:ERROR:', err); 
+                this.logger.errorDialog(err);
+            }
         );
     }
 

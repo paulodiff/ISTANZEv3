@@ -36,8 +36,6 @@ Prime idee:
 - npm install --save @ng-bootstrap/ng-bootstrap
 
 - npm install --save ngx-bootstrap
-- - 1
-- - 2
 
 - http://valor-software.com/ngx-bootstrap/index-bs4.html#/
 
@@ -48,37 +46,40 @@ Prime idee:
 
 ## Services / Singleton
 
-get save delete Observable
-https://www.barbarianmeetscoding.com/blog/2016/04/02/getting-started-with-angular-2-step-by-step-6-consuming-real-data-with-http/
+- get save delete Observable
+- https://www.barbarianmeetscoding.com/blog/2016/04/02/getting-started-with-angular-2-step-by-step-6-consuming-real-data-with-http/
 
 Per accesso ai dati
 
 # Sicurezza
 
-Autorizzazioni e Login e Profilo
-http://jasonwatmore.com/post/2016/08/16/angular-2-jwt-authentication-example-tutorial
+ - Autorizzazioni e Login e Profilo
+ - http://jasonwatmore.com/post/2016/08/16/angular-2-jwt-authentication-example-tutorial
 
 # Interceptor
 
-https://scotch.io/@kashyapmukkamala/using-http-interceptor-with-angular2
+- https://scotch.io/@kashyapmukkamala/using-http-interceptor-with-angular2
 
 # Grid
 
-Grid - https://swimlane.gitbooks.io/ngx-datatable/content/introduction/features.html
-ng2-grid
+- ng2-smart-table
+- https://akveo.github.io/ng2-smart-table/#/
 
-ng2-table
-npm i ng2-table --save
+- Grid - https://swimlane.gitbooks.io/ngx-datatable/content/introduction/features.html
+- ng2-grid
 
-AngularJs DataTable
-http://danielnagy.me/md-data-table/
+- ng2-table
+- npm i ng2-table --save
+
+- AngularJs DataTable
+- http://danielnagy.me/md-data-table/
 
 - Da provare
 - https://akveo.github.io/ng2-smart-table/#/demo
 
 # Chart
 
-npm install ng2-charts --save
+- npm install ng2-charts --save
 
 # Template
 
@@ -89,4 +90,7 @@ npm install ng2-charts --save
 
 # Test e2e
 
-Ecc.
+# Documentation tool
+
+- https://github.com/compodoc/compodoc
+

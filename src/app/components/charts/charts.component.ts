@@ -30,7 +30,7 @@ export class ChartsComponent implements OnInit {
     errorMessage: String = '';
     observablePhotos: Observable<Photo[]>;
     error = '';
-    public phoneData = <any>{};
+    public returnData = <any>{};
     // public lineChartData: Array<any> = [ {data: [], label: ''}];
     // public lineChartLabels: Array<any> = [];
 
@@ -48,7 +48,7 @@ export class ChartsComponent implements OnInit {
     showXAxisLabel = true;
     xAxisLabel = 'Periodo';
     showYAxisLabel = true;
-    yAxisLabel = 'N. telefonate';
+    yAxisLabel = 'N. Atti';
 
   colorScheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
@@ -56,19 +56,6 @@ export class ChartsComponent implements OnInit {
 
   dataChart = [];
   buildedDataChart = [];
-
-    /*
-    rows = [
-            { name: 'Austin', gender: 'Male', company: 'Swimlane' },
-            { name: 'Dany', gender: 'Male', company: 'KFC' },
-            { name: 'Molly', gender: 'Female', company: 'Burger King' },
-        ];
-        columns = [
-            { prop: 'name' },
-            { name: 'Gender' },
-            { name: 'Company' }
-        ];
-    */    
 
     constructor(
         private router: Router,
@@ -137,10 +124,9 @@ export class ChartsComponent implements OnInit {
       this.postaService.getStats(this.model)
       .subscribe(
         res => {
-          this.phoneData = res;
-          console.log(this.phoneData);
-          // this.onChangeTable(this.config);
-          // this.buildChart();
+          this.returnData = res;
+          console.log(this.returnData);
+          this.buildChart();
           this.loading = false;
         },
         e => this.errorMessage = e,
@@ -152,81 +138,91 @@ export class ChartsComponent implements OnInit {
     buildChart() {
       console.log('ChartsComponent:buildChart');
 
-      // this.lineChartLabels = [];
-      // this.lineChartData = [];
-      
-      /*
-      // per tutti i dati
-      for ( let i = 0; i < this.phoneData[0].lenght; i++) {
-        this.lineChartLabels.push(this.phoneData[i].id);
-        // per tutte le entry verifico se esiste lo aggiorno
-      }
-      */
-
-      // build labels
-
-      /*
-
-      let _lineChartData:Array<any> = new Array(this.phoneData[0].length);
-      for (let item of this.phoneData[0].data ){
-          console.log(item);
-
-          // check nelle labels
-          if ( this.lineChartLabels.indexOf(item.data_ora) === -1 ) {
-            _lineChartData.push(item.data_ora);
-          }
-
-      }
-      console.log(_lineChartData);
-      this.lineChartLabels = _lineChartData;
-      var numOfLabels = this.lineChartLabels.length;
-
-      // per ogni dati cerco l'indice della labels e per ogni serie inserisco l'i-esimo elemento
-      // init chart data
-      for (let item of this.phoneData[0].data ){
-          // check nelle labels
-          let bFound = false;
-          for (let item2 of this.lineChartData ){
-            if ( item2.label === item.tel_chiamato) {
-              bFound = true;
-            }
-          }
-          if (!bFound) {
-            let voidArray = [];
-            for ( let j = 0; j < numOfLabels; j++) { voidArray.push(Math.floor((Math.random() * 100) + 1)); };
-            this.lineChartData.push({ label : item.tel_chiamato, data: voidArray});
-          }
-      }
-      */
-
-
       this.dataChart = [];
       let currDate = '';
       let currIndex = 0;
-      let mySeries = this.phoneData[0].series;
 
-      for ( let j = 0; j < mySeries.length; j++) {
-        this.dataChart.push({
-          'name': mySeries[j],
-          'series' : []
+      /** StatsCountItem 
+
+          Costruzione di un array di questo tipo
+      [
+        {
+          "name": "20170101",
+          "series": [
+          {
+            "name": "R01 - xxx",
+            "value": 40632
+          },
+          {
+            "name": "R02 - xxxx",
+            "value": 36953
           }
-        );
+          ... altri elementi
+        ]
+      },
+      {
+        "name": "20170102",
+        "series": [
+          {
+            "name": "R01 - xxx",
+            "value": 49737
+          },
+          {
+            "name": "R02 - xxx",
+            "value": 0
+          }
+        ]
+      }
+
+      */
+      console.log('ChartsComponent:buildChart:series');
+
+      // legge tutti i dati ed imposta le serie vuote sul dataChart
+      let bFound = false; let indexFound = 0;
+
+      for (let item of this.returnData.StatsCountItem ){
+        // se esiste la serie salta altrimenti inserisce
+        console.log(item);
+        bFound = false; indexFound = 0;
+        for ( let k = 0; k < this.dataChart.length; k++) {
+          if (this.dataChart[k].name === item.posta_id_cut) {
+            bFound = true;
+            indexFound = k;
+            console.log('found:', k, indexFound);
+          }
+        }
+
+        if (!bFound) {
+          console.log('push:', {
+            'name': item.posta_id_cut,
+            'series' : []
+            });
+          this.dataChart.push({
+            'name': item.posta_id_cut,
+            'series' : []
+            }
+          );
+        }
       }
 
       console.log(this.dataChart);
 
-      // riempimento dei dati
-      for (let item of this.phoneData[0].data ){
+      console.log('ChartsComponent:buildChart:data');
+
+      // legge tutti i dati, aggiunge il dato alla serie corretta ed aggiunge 0 alle altre se non impostate
+
+      for (let item of this.returnData.StatsCountItem ){
 
         // per ogni serie
-        for ( let j = 0; j < mySeries.length; j++) {
+        for ( let j = 0; j < this.dataChart.length; j++) {
 
-          let bFound = false; let indexFound = 0;
+
           // se il dato appartiene alla serie
-          if ( this.dataChart[j].name === item.tel_chiamato ) {
-            // da aggiornare o inserire
+          if ( this.dataChart[j].name === item.posta_id_cut ) {
+
+            // controllo nella serie se il dato è da aggiornare (se presente) o inserire
             for ( let k = 0; k < this.dataChart[j].series.length; k++) {
-              if (this.dataChart[j].series[k].name === item.data_ora) { 
+              if (this.dataChart[j].series[k].name === item.tipo_spedizione) { 
                 bFound = true;
                 indexFound = k;
                 console.log('found:', j, k, indexFound);
@@ -235,19 +231,19 @@ export class ChartsComponent implements OnInit {
 
             if (!bFound) {
               this.dataChart[j].series.push({
-                'name': item.data_ora,
-                'value': item.numTelefonate
+                'name': item.tipo_spedizione,
+                'value': item.posta_id_count
               });
             } else {
-              this.dataChart[j].series[indexFound].value = item.numTelefonate;
+              this.dataChart[j].series[indexFound].value = item.posta_id_count;
             }
           } else  {
             // il dato non appartiene alla serie quindi
             // da inserire 0 solo se non esiste
 
-            let bFound = false; let indexFound = 0;
+            bFound = false; indexFound = 0;
             for ( let k = 0; k < this.dataChart[j].series.length; k++) {
-              if (this.dataChart[j].series[k].name === item.data_ora) { 
+              if (this.dataChart[j].series[k].name === item.tipo_spedizione) { 
                 bFound = true;
                 indexFound = k;
                 console.log('found:', j, k, indexFound);
@@ -256,7 +252,7 @@ export class ChartsComponent implements OnInit {
 
             if (!bFound) {
               this.dataChart[j].series.push({
-                'name': item.data_ora,
+                'name': item.tipo_spedizione,
                 'value': 0
               });
             }

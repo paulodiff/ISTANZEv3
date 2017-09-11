@@ -45,7 +45,21 @@ public config:any = {
     className: ['table-striped', 'table-bordered']
   };
 
-   data:Array<any> = [];
+  settingsDataTable = {
+    columns: {
+                id: {title: 'ID'     },
+                codice: {title: 'Codice'},
+                cdc: { title: 'Cdc' }
+    },
+    add: {
+        addButtonContent: '<i class="ion-add">ADD</i>',
+        createButtonContent: '<i class="ion-checkmark">CREATE</i>',
+        cancelButtonContent: '<i class="ion-close">CANCEL</i>',
+        confirmCreate: true
+      }
+  };
+
+   sourceDataTable:Array<any> = [];
 
     /*
     rows = [
@@ -74,8 +88,8 @@ public config:any = {
 
         this.postaService.getCDC().subscribe(
             res => {
-                this.rows = res;
-                console.log(this.rows);
+                this.sourceDataTable = res;
+                console.log(this.sourceDataTable);
                 },
             e => { this.errorMessage = e; this.loading = false; },
             () =>  {  this.loading = false; }
@@ -103,12 +117,24 @@ public config:any = {
 
 
     pdfMake() {
-        const dd = {
+        let today = new Date();
+        let t1 = {
+            style: 'tableExample',
+            table: {
+                body:  this.sourceDataTable // [ ['One value goes here', 'Another one here', 'OK?']  ]
+            }
+        };
+        let dd = {
             content: [
                 'First paragraph',
-                'Another paragraph, this time a little bit longer to make sure, this line will be divided into at least two lines'
+                'Another paragraph, this time a little bit longer to make sure, this line will be divided into at least two lines1',
+                'Demo',
+                this.sourceDataTable.length,
+                today.toISOString(),
+                t1
             ]
         };
+        console.log(dd);
         pdfMake.createPdf(dd).open();
 
     }
